@@ -14,12 +14,12 @@ class Group
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column()]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: Trick::class, inversedBy: 'trickGroups')]
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: Trick::class)]
     private Collection $Tricks;
 
     public function __construct()
@@ -56,6 +56,7 @@ class Group
     {
         if (!$this->Tricks->contains($trick)) {
             $this->Tricks->add($trick);
+            $trick->setGroup($this);
         }
 
         return $this;

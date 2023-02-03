@@ -11,20 +11,20 @@ class Picture
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
-    #[ORM\Column(length: 255)]
-    private ?string $path = null;
+    #[ORM\Column()]
+    private string $path;
 
     #[ORM\ManyToOne(inversedBy: 'pictures')]
     private ?Trick $trick = null;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getPath(): ?string
+    public function getPath(): string
     {
         return $this->path;
     }

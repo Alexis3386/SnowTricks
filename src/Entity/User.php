@@ -2,32 +2,33 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    #[ORM\Column()]
+    private string $name;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    #[ORM\Column()]
+    private string $email;
 
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
+    #[ORM\Column()]
+    private string $password;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(nullable: true)]
     private ?string $pathPhoto = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $userComment;
 
     public function __construct()
@@ -64,7 +65,7 @@ class User
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -76,7 +77,7 @@ class User
         return $this;
     }
 
-    public function getPathPhoto(): ?string
+    public function getPathPhoto(): string
     {
         return $this->pathPhoto;
     }

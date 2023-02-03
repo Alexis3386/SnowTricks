@@ -14,16 +14,20 @@ class Trick
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    #[ORM\Column()]
+    private string $name;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
+    private string $description;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class)]
+    #[ORM\OrderBy(["creationDate" => "DESC"])]
     private Collection $comments;
+
+    #[ORM\ManyToOne(inversedBy: 'group')]
+    private ?Group $group = null;
 
     #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'Tricks')]
     private Collection $trickGroups;
@@ -42,14 +46,13 @@ class Trick
         $this->pictures = new ArrayCollection();
         $this->movies = new ArrayCollection();
     }
-    
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -61,7 +64,7 @@ class Trick
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -98,33 +101,6 @@ class Trick
             if ($comment->getTrick() === $this) {
                 $comment->setTrick(null);
             }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Group>
-     */
-    public function getTrickGroups(): Collection
-    {
-        return $this->trickGroups;
-    }
-
-    public function addTrickGroup(Group $trickGroup): self
-    {
-        if (!$this->trickGroups->contains($trickGroup)) {
-            $this->trickGroups->add($trickGroup);
-            $trickGroup->addTrick($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTrickGroup(Group $trickGroup): self
-    {
-        if ($this->trickGroups->removeElement($trickGroup)) {
-            $trickGroup->removeTrick($this);
         }
 
         return $this;
@@ -186,6 +162,18 @@ class Trick
                 $movie->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGroup(): ?Group
+    {
+        return $this->group;
+    }
+
+    public function setGroup(?Group $group): self
+    {
+        $this->group = $group;
 
         return $this;
     }

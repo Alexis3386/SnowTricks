@@ -12,20 +12,20 @@ class Movie
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $html = null;
+    private string $html;
 
     #[ORM\ManyToOne(inversedBy: 'movies')]
     private ?Trick $trick = null;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getHtml(): ?string
+    public function getHtml(): string
     {
         return $this->html;
     }
