@@ -23,13 +23,19 @@ class User implements PasswordAuthenticatedUserInterface
     private string $email;
 
     #[ORM\Column()]
-    private string $password;
+    private string $password = '';
 
     #[ORM\Column(nullable: true)]
     private ?string $pathPhoto = null;
 
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $userComment;
+
+    #[ORM\Column()]
+    private bool $isValidate = false;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $token = null;
 
     public function __construct()
     {
@@ -77,16 +83,40 @@ class User implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPathPhoto(): string
+    public function getPathPhoto(): ?string
     {
         return $this->pathPhoto;
     }
 
-    public function setPathPhoto(string $pathPhoto): self
+    public function setPathPhoto(?string $pathPhoto): self
     {
         $this->pathPhoto = $pathPhoto;
 
         return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function validate(): self
+    {
+        $this->isValidate = true;
+
+        return $this;
+    }
+
+    public function isValidated() : bool
+    {
+        return $this->isValidate;
     }
 
     /**
