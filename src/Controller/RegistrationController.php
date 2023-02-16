@@ -3,65 +3,110 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserType;
-use App\Service\MailerService;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Form\RegistrationFormType;
+use App\Security\AppCustomAuthenticator;
+use App\Security\EmailVerifier;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
+    private EmailVerifier $emailVerifier;
 
-    #[Route('/register', name: 'user_register')]
+    public function __construct(EmailVerifier $emailVerifier)
+    {
+        $this->emailVerifier = $emailVerifier;
+    }
+
+    #[Route('/register', name: 'app_register')]
     public function register(
         Request $request,
-        UserPasswordHasherInterface $passwordHasher,
-        MailerService $mailer,
-        ManagerRegistry $doctrine,
-    ): Response {
+        UserPasswordHasherInterface $userPasswordHasher,
+        UserAuthenticatorInterface $userAuthenticator,
+        AppCustomAuthenticator $authenticator,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->add('Submit', SubmitType::class, [
-            'attr' => ['class' => 'save'],
-        ]);
+        $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($form->getData());
-            $em = $doctrine->getManager();
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $form->get('rawPassword')->getData()
+            // encode the plain password
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
             );
-            $user->setPassword($hashedPassword);
-            $user->setToken(bin2hex(random_bytes(32)));
-            $em->persist($user);
-            $em->flush();
-            $mailer->sendValidationEmail($user);
 
-            //todo return message de validation et redirect
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            // generate a signed url and email it to the user
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
+                (new TemplatedEmail())
+                    ->from(new Address('alexis.mathiot@gmail.com', 'Mail verification'))
+                    ->to($user->getEmail())
+                    ->subject('Please Confirm your Email')
+                    ->htmlTemplate('registration/confirmation_email.html.twig')
+            );
+            // do anything else you need here, like send an email
+
+            return $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request
+            );
         }
 
-        return $this->render('user/register.html.twig', [
-            'form' => $form,
+        return $this->render('registration/register.html.twig', [
+            'registrationForm' => $form->createView(),
         ]);
     }
 
-    #[Route('/valide/{user}/{token}', name: 'user_validate')]
-    public function valide(User $user, string $token, ManagerRegistry $doctrine): Response
+    #[Route('/verify/email', name: 'app_verify_email')]
+    public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
     {
-        if ($user->getToken() === $token) {
-            $em = $doctrine->getManager();
-            $user->validate();
-            $user->setToken(null);
-            $em->flush();
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-            //todo return message de validation et redirect
+        // validate email confirmation link, sets User::isVerified=true and persists
+        try {
+            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+        } catch (VerifyEmailExceptionInterface $exception) {
+            $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+
+            return $this->redirectToRoute('app_register');
         }
 
-        return $this->redirectToRoute('user_register');
+        // @TODO Change the redirect on success and handle or remove the flash message in your templates
+        $this->addFlash('success', 'Your email address has been verified.');
+
+        return $this->redirectToRoute('test');
+    }
+
+    #[Route(path: '/reset_password', name: 'reset_password')]
+    public function resetPassword()
+    {
+        $this->emailVerifier->sendEmailConfirmation(
+            'reset_password',
+            $user,
+            (new TemplatedEmail())
+                ->from(new Address('alexis.mathiot@gmail.com'))
+                ->to($user->getEmail())
+                ->subject('Please Change your Password')
+                ->htmlTemplate('registration/confirmation_email.html.twig')
+        );
     }
 }
