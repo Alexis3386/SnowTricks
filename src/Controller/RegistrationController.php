@@ -17,14 +17,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class RegistrationController extends AbstractController
 {
     private EmailVerifier $emailVerifier;
+    private Security $security;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(EmailVerifier $emailVerifier, Security $security)
     {
         $this->emailVerifier = $emailVerifier;
+        $this->security = $security;
     }
 
     #[Route('/register', name: 'app_register')]
@@ -62,13 +65,16 @@ class RegistrationController extends AbstractController
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
-            // do anything else you need here, like send an email
+
+            $this->addFlash('success', 'Merci de valider votre compte via le mail de confirmation qui vous été envoyé');
 
             return $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
                 $request
             );
+
+            $this->redirectToRoute('test');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -91,22 +97,8 @@ class RegistrationController extends AbstractController
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash('success', 'Votre adresse mail à bien été verified.');
 
         return $this->redirectToRoute('test');
-    }
-
-    #[Route(path: '/reset_password', name: 'reset_password')]
-    public function resetPassword()
-    {
-        $this->emailVerifier->sendEmailConfirmation(
-            'reset_password',
-            $user,
-            (new TemplatedEmail())
-                ->from(new Address('alexis.mathiot@gmail.com'))
-                ->to($user->getEmail())
-                ->subject('Please Change your Password')
-                ->htmlTemplate('registration/confirmation_email.html.twig')
-        );
     }
 }

@@ -19,8 +19,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column()]
-    private string $name;
+    #[ORM\Column(unique: true)]
+    private string $username;
 
     #[ORM\Column(length: 180, unique: true)]
     private $email;
@@ -43,6 +43,9 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(nullable: true)]
     private ?string $token = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?string $resetToken = null;
+
     public function __construct()
     {
         $this->userComment = new ArrayCollection();
@@ -53,14 +56,14 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getUsername(): ?string
     {
-        return $this->name;
+        return $this->username;
     }
 
-    public function setName(string $name): self
+    public function setUsername(string $username): self
     {
-        $this->name = $name;
+        $this->username = $username;
 
         return $this;
     }
@@ -109,6 +112,18 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function setToken(?string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $token): self
+    {
+        $this->resetToken = $token;
 
         return $this;
     }

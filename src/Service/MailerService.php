@@ -29,4 +29,30 @@ class MailerService
 
         $this->mailer->send($email);
     }
+
+    //  $mail->send(
+    //     'no-reply@domain.fr',
+    //     $user->getEmail(),
+    //     'Réinitialisation de mot de passe',
+    //     'reset_password',
+    //     $context
+    // );
+
+    public function send($to, $email, $subject, $template, $context) : Void
+    {
+        $email = (new TemplatedEmail())
+        ->from($this->sender_email)
+        ->to($email)
+        //->cc('cc@example.com')
+        //->bcc('bcc@example.com')
+        //->replyTo('fabien@example.com')
+        //->priority(Email::PRIORITY_HIGH)
+        ->subject($subject)
+        ->htmlTemplate('emails/' . $template . '.html.twig')
+
+    // pass variables (name => value) to the template
+        ->context($context);
+
+    $this->mailer->send($email);
+    }
 }
