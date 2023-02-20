@@ -34,7 +34,6 @@ class RegistrationController extends AbstractController
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        UserAuthenticatorInterface $userAuthenticator,
         AppCustomAuthenticator $authenticator,
         EntityManagerInterface $entityManager
     ): Response
@@ -68,13 +67,7 @@ class RegistrationController extends AbstractController
 
             $this->addFlash('success', 'Merci de valider votre compte via le mail de confirmation qui vous été envoyé');
 
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
-
-            $this->redirectToRoute('test');
+            return $this->redirectToRoute('attente_validation');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -82,14 +75,18 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
+    #[Route('/verify/email/{user}', name: 'app_verify_email')]
+    public function verifyUserEmail(
+        User $user,
+        Request $request,
+        TranslatorInterface $translator,
+        UserAuthenticatorInterface $userAuthenticator,
+        AppCustomAuthenticator $authenticator,
+        ): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 
