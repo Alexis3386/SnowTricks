@@ -119,6 +119,6 @@ class SecurityController extends AbstractController
         }
 
         $this->addFlash('danger', 'Jeton invalide');
-        return $this->redirectToRoute();
+        return $this->redirectToRoute('app_home');
     }
 }
