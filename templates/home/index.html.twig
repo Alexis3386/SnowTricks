@@ -4,25 +4,29 @@
 {% endblock %}
 
 {% block body %}
-	<div>
-		<div class="hero row">
-			<h2>born to tricks</h2>
-		</div>
-		<video id="background-video" autoplay loop muted>
+	<header>
+		<nav></nav>
+	</header>
 
-			<source src="https://assets.codepen.io/6093409/river.mp4" type="video/mp4">
-
-		</video>
-
-		<div class="content">
-
-			<h1>BIEN PLUS QU'UNE RIVIÈRE</h1>
-
-			<h2>Une source de vie</h2>
-
-			<button id="btnVideo" onclick="playAndPause()">Pause II</button>
-
+	<div class="container-fluid">
+		<div class="row">
+			<div class="hero">
+				<h1>Born to Snowboard</h1>
+				<div class="scrool-icon text-center">
+					<p class="important">Scroller pour voire les figures</p>
+					<i class="fa-solid fa-down-long"></i>
+				</div>
+			</div>
 		</div>
 	</div>
 
+	<div class="container">
+		<main>
+			<div class="row gx-5 mt-3">
+			{% include 'home/indexTricks.html.twig' %}
+			</div>
+			<button id="load-more-button">Charger plus de figures</button>
+		</main>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 {% endblock %}

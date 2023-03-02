@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 class Trick
 {
+    #[Groups(['accueil'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
