@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TrickController!
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<div class="row justify-content-center mt-5">
+			<div class="col-md-12">
+				<div class="card mt-5 p-4">
+					<div class="card-img-featured">
+						<img class="img-featured" src="{{trick.featuredImage}}" alt="">
+					</div>
+					<div class="mt-3">
+						<ul class="list-inline">
+							<li class="list-inline-item pe-3 border-end">Par :
+								{{author.username}}</li>
+							<li class="list-inline-item pe-3 border-end">Ajouté le :
+								{{ trick.CreationDate|date("d/m/Y") }}</li>
+							<li class="list-inline-item pe-3 border-end">Catégorie :
+								{{ trick.group.name }}</li>
+							<li class="list-inline-item pe-3 border-end"></li>
+						</ul>
+					</div>
+					<hr>
+					<h2>{{trick.name | capitalize}}</h2>
+					<hr>
+					<div class="row">
+						{% if images|length >= 1 %}
+							<div class="col-6">
+								<section id="image-carousel" style="height: 100%;" class="splide h-100" aria-label="Beautiful Images">
+									<div class="splide__track h-100" style="height: 100%;">
+										<ul class="splide__list h-100" style="height: 100%;">
+											{% for image in images %}
+												<li class="splide__slide h-100">
+													<img class="img-trick" src='{{ image.path }}' alt="">
+												</li>
+											{% endfor %}
+										</ul>
+									</div>
+								</section>
+							</div>
+						{% endif %}
+						{% if movies|length >= 1 %}
+							<div class="col-6">
+								<section id="movie-carousel" class="splide" aria-label="Beautiful Images">
+									<div class="splide__track">
+										<ul class="splide__list">
+											{% for movie in movies %}
+												<li class="splide__slide">
+													{{ movie.html | raw }}
+												</li>
+											{% endfor %}
+										</ul>
+									</div>
+								</section>
+							</div>
+						{% endif %}
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-12">
+							<h2>Description</h2>
+							<p>{{ trick.description }}</p>
+						</div>
+					</div>
+				</div>
+
+				{% if commentaires | length > 0 %}
+					<div class="card comment mt-5 p-5">
+						{% for commentaire in commentaires %}
+							<div>
+								<div class="d-flex align-items-center">
+									<h3 class="me-2">{{commentaire.user.username}}</h3>
+									<small>{{commentaire.creationDate | date("d/m/Y")}}</small>
+								</div>
+								<p>{{commentaire.Content}}</p>
+							</div>
+						{% endfor %}
+					</div>
+				{% else %}
+					<div>
+						<p>Pas encore de commentaire pour cette figure,
+							<a href="{{path('register')}}">inscrivez-vous</a>
+						</p>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

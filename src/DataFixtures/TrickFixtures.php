@@ -12,6 +12,7 @@ use App\Entity\Picture;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class TrickFixtures extends Fixture implements DependentFixtureInterface
@@ -33,30 +34,35 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        $users = $this->userRepository->findAll();
+        $manager->getConnection()->getConfiguration()->setSQLLogger(null);
+        $slugger = new AsciiSlugger();
         $groups = ['Grab', 'Rotation', 'Flip', 'Rotations désaxées', 'Slide'];
         foreach ($groups as $groupName) {
+            $users = $this->userRepository->findAll();
             $group = new Group();
             $group->setName($groupName);
             $manager->persist($group);
 
-            for ($i = 0; $i < $this->faker->numberBetween(2, 12); $i++) {
-
+            for ($i = 0; $i < 5; $i++) {
                 $trick = new Trick();
-                $trick->setName($this->faker->word($this->faker->numberBetween(1, 5)))
-                    ->setDescription($this->faker->text($this->faker->numberBetween(100, 2000), true));
+                $trickName = $this->faker->sentence($this->faker->numberBetween(1, 3));
+                $trick->setName($trickName)
+                    ->setDescription($this->faker->text($this->faker->numberBetween(100, 2000), true))
+                    ->setFeaturedImage('/img/Intermediate_to_Advanced_Boarding.jpg')
+                    ->setUser($this->faker->randomElement($users))
+                    ->setCreationDate($this->faker->dateTimeBetween('-6 month', 'now'))
+                    ->setSlug($slugger->slug($trickName));
 
-                for ($i = 0; $i < $this->faker->numberBetween(1, 5); $i++) {
+                for ($j = 0; $j < $this->faker->numberBetween(1, 5); $j++) {
                     $picture = new Picture();
-                    $picture->setPath('/img/placeholer.jpg');
+                    $picture->setPath('/img/placeholder.jpg');
                     $manager->persist($picture);
                     $trick->addPicture($picture);
                 }
 
-
-                for ($i = 0; $i < $this->faker->numberBetween(1, 3); $i++) {
+                for ($j = 0; $j < $this->faker->numberBetween(1, 3); $j++) {
                     $movie = new Movie();
-                    $movie->setHtml('<iframe width="560" height="315" src="https://www.youtube.com/embed/NpEaa2P7qZI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
+                    $movie->setHtml('<iframe width="100%" height="100%" src="https://www.youtube.com/embed/NpEaa2P7qZI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
                     $manager->persist($movie);
                     $trick->addMovie($movie);
                 }
@@ -64,11 +70,11 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 
                 $manager->persist($trick);
 
-                for ($i = 0; $i < 3; $i++) {
+                for ($j = 0; $j < 3; $j++) {
 
                     $comment = new Comment();
                     $comment->setCreationDate($this->faker->dateTimeBetween('-6 month', 'now'));
-                    $comment->setContent($this->faker->text($this->faker->numberBetween(2, 1000)));
+                    $comment->setContent($this->faker->text($this->faker->numberBetween(5, 500)));
                     $comment->setUser($this->faker->randomElement($users));
                     $comment->setTrick($trick);
                     $manager->persist($comment);
@@ -76,7 +82,8 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 
                 $group->addTrick($trick);
             }
+            $manager->flush();
+            $manager->clear();
         }
-        $manager->flush();
     }
 }

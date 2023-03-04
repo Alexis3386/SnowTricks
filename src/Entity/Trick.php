@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\TrickRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TrickRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 class Trick
@@ -20,6 +21,9 @@ class Trick
     #[ORM\Column()]
     private string $name;
 
+    #[ORM\Column()]
+    private string $featuredImage;
+
     #[ORM\Column(type: Types::TEXT)]
     private string $description;
 
@@ -30,8 +34,8 @@ class Trick
     #[ORM\ManyToOne(inversedBy: 'group')]
     private ?Group $group = null;
 
-    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'Tricks')]
-    private Collection $trickGroups;
+    #[ORM\ManyToOne(inversedBy: 'user')]
+    private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class)]
     private Collection $pictures;
@@ -39,6 +43,11 @@ class Trick
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Movie::class)]
     private Collection $movies;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $creationDate = null;
+
+    #[ORM\Column(unique: true)]
+    private string $slug;
 
     public function __construct()
     {
@@ -65,6 +74,18 @@ class Trick
         return $this;
     }
 
+    public function getFeaturedImage(): string
+    {
+        return $this->featuredImage;
+    }
+
+    public function setFeaturedImage(string $featuredImage): self
+    {
+        $this->featuredImage = $featuredImage;
+
+        return $this;
+    }
+
     public function getDescription(): string
     {
         return $this->description;
@@ -73,6 +94,18 @@ class Trick
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
@@ -179,4 +212,27 @@ class Trick
         return $this;
     }
 
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): self
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
 }

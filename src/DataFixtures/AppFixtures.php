@@ -28,7 +28,7 @@ class AppFixtures extends Fixture
             ->setPassword($this->paswordHasher->hashPassword($user, 'password'));
         $manager->persist($user);
 
-        for ($i = 0; $i <4; $i++) {
+        for ($i = 0; $i < 4; $i++) {
             $user = new User();
             $user->setEmail($this->faker->safeEmail())
                 ->setUsername($this->faker->firstName())

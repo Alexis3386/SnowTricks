@@ -20,12 +20,13 @@
 		</div>
 	</div>
 
-	<div class="container">
+	<div class="container p-5">
 		<main>
-			<div class="row gx-5 mt-3">
-			{% include 'home/indexTricks.html.twig' %}
+			{% include 'home/indexTricks.html.twig' with {'column' : 4} %}
+			<div class="text-center mt-3">
+				<a href="" id="load-more-button"><i class="fas fa-plus-circle fa-3x"></i></a>
+				<a href="" id="load-less-button"><i class="fas fa-minus-circle fa-3x"></i></a>
 			</div>
-			<button id="load-more-button">Charger plus de figures</button>
 		</main>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
