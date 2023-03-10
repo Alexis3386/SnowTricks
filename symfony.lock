@@ -47,6 +47,12 @@
             "./migrations/.gitignore"
         ]
     },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v6.1.1"
+    },
+    "lelyfoto/twig-instanceof": {
+        "version": "v1.1"
+    },
     "phpunit/phpunit": {
         "version": "9.5",
         "recipe": {

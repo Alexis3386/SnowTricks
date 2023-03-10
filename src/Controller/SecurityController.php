@@ -54,7 +54,7 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $userRepository->findOneByUsername($form->get('username')->getData());
 
-            if ($user) {
+            if ($user !== null) {
                 $token = $tokenGenerator->generateToken();
                 $user->setResetToken($token);
                 $entityManager->persist($user);
@@ -94,7 +94,7 @@ class SecurityController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher
     ): Response {
         $user = $userRepository->findOneByResetToken($token);
-        if ($user) {
+        if ($user !== null) {
             $form = $this->createForm(ResetPasswordType::class);
             $form->handleRequest($request);
 
@@ -119,6 +119,6 @@ class SecurityController extends AbstractController
         }
 
         $this->addFlash('danger', 'Jeton invalide');
-        $this->redirectToRoute();
+        return $this->redirectToRoute('app_home');
     }
 }

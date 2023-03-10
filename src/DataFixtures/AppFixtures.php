@@ -11,7 +11,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-
     private Generator $faker;
 
     public function __construct(private UserPasswordHasherInterface $paswordHasher)
@@ -22,10 +21,9 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-
         $user = new User();
         $user->setEmail('user@test.com')
-            ->setName($this->faker->firstName())
+            ->setUsername('Alex')
             ->setPathPhoto('chemin/test')
             ->setPassword($this->paswordHasher->hashPassword($user, 'password'));
         $manager->persist($user);
@@ -33,7 +31,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 4; $i++) {
             $user = new User();
             $user->setEmail($this->faker->safeEmail())
-                ->setName($this->faker->firstName())
+                ->setUsername($this->faker->firstName())
                 ->setPathPhoto('chemin/test')
                 ->setPassword($this->paswordHasher->hashPassword($user, 'password'));
             $manager->persist($user);

@@ -53,6 +53,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->save($user, true);
     }
 
+    public function findOneByResetToken(string $token): ?User
+    {
+        return $this->findOneBy(['resetToken'=> $token]);
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

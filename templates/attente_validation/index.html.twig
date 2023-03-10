@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AttenteValidationController!
+{% endblock %}
+
+{% block body %}
+	<style>
+		.example-wrapper {
+			margin: 1em auto;
+			max-width: 800px;
+			width: 95%;
+			font: 18px / 1.5 sans-serif;
+		}
+		.example-wrapper code {
+			background: #F5F5F5;
+			padding: 2px 6px;
+		}
+	</style>
+
+	<div class="example-wrapper">
+		<h1>Bonjour
+		</h1>
+		<p>
+			Nous sommes ravis de vous accueillir en tant que nouveau membre de notre communauté en ligne ! Cependant, avant que vous puissiez accéder à toutes les fonctionnalités de notre site, nous avons besoin de confirmer votre adresse e-mail.
+						
+						Pourriez-vous s'il vous plaît cliquer sur le lien de confirmation que nous vous avons envoyé par e-mail à l'adresse que vous avez fournie lors de votre inscription ? Si vous ne trouvez pas notre e-mail dans votre boîte de réception, veuillez vérifier votre dossier de spam ou de courrier indésirable.
+						
+						La confirmation de votre adresse e-mail est essentielle pour garantir la sécurité de votre compte et pour vous informer des mises à jour importantes concernant notre site.
+						
+						Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter.
+						
+						Cordialement,
+						
+						L'équipe de Snowtricks
+
+		</p>
+
+		<div class="mb-3 text">
+			<a href="{{ path('app_login') }}">Se connecter</a>
+		</div>
+
+	</div>
+{% endblock %}
