@@ -53,7 +53,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
                     ->setCreationDate($this->faker->dateTimeBetween('-6 month', 'now'))
                     ->setSlug($slugger->slug($trickName));
 
-                for ($j = 0; $j < $this->faker->numberBetween(1, 5); $j++) {
+                for ($j = 0; $j < $this->faker->numberBetween(1, 3); $j++) {
                     $picture = new Picture();
                     $picture->setPath('/img/placeholder.jpg');
                     $manager->persist($picture);

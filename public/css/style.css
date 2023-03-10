@@ -91,4 +91,6 @@ main .img-container img {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 1rem;
+    background-color: azure;
+    opacity: 0.8;
 }

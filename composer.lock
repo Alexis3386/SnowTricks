@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "93a0891ff7adba700ff00035bd2df205",
+    "content-hash": "aea939145f0ec86bcf95bc29f418e42b",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1760,6 +1760,54 @@
                 }
             ],
             "time": "2022-12-08T02:08:23+00:00"
+        },
+        {
+            "name": "lelyfoto/twig-instanceof",
+            "version": "v1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lelyfoto/twig-instanceof.git",
+                "reference": "dd7205d4b1422167c791037a3a86e9baf9b1e5f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lelyfoto/twig-instanceof/zipball/dd7205d4b1422167c791037a3a86e9baf9b1e5f7",
+                "reference": "dd7205d4b1422167c791037a3a86e9baf9b1e5f7",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0",
+                "symfony/framework-bundle": "^5.4 || ^6.0",
+                "twig/twig": "^3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Lelyfoto\\Twig\\InstanceOf\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Erkens",
+                    "email": "github@lelyfoto.nl"
+                }
+            ],
+            "description": "Adds InstanceOf Expression as Twig Extension",
+            "homepage": "https://github.com/lelyfoto/twig-instanceof",
+            "keywords": [
+                "instanceof",
+                "symfony",
+                "twig"
+            ],
+            "support": {
+                "issues": "https://github.com/lelyfoto/twig-instanceof/issues",
+                "source": "https://github.com/lelyfoto/twig-instanceof/tree/v1.1"
+            },
+            "time": "2023-02-26T12:11:47+00:00"
         },
         {
             "name": "monolog/monolog",

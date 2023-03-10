@@ -12,57 +12,53 @@
 						<img class="img-featured" src="{{trick.featuredImage}}" alt="">
 						<h2 class="trick-title position-absolute">{{trick.name | capitalize}}</h2>
 					</div>
-					<div class="mt-3">
-						<ul class="list-inline">
-							<li class="list-inline-item pe-3 border-end">Par :
-								{{author.username}}</li>
-							<li class="list-inline-item pe-3 border-end">Ajouté le :
-								{{ trick.CreationDate|date("d/m/Y") }}</li>
-							<li class="list-inline-item pe-3 border-end">Catégorie :
-								{{ trick.group.name }}</li>
-							<li class="list-inline-item pe-3 border-end"></li>
-						</ul>
+					<hr>
+					<div class="row justify-content-center">
+						{% for picture in pictures %}
+							<div class="col-2">
+								<img style="width: 100%; height: 100%; object-fit: cover;" src="{{picture.path}}" alt="">
+							</div>
+						{% endfor %}
+						{% for movie in movies %}
+							<div class="col-2">
+								{{ movie.html | raw }}
+							</div>
+						{% endfor %}
 					</div>
 					<hr>
-					<div class="row">
-						{% if images|length >= 1 %}
-							<div class="col-6">
-								<section id="image-carousel" style="height: 100%;" class="splide h-100" aria-label="Beautiful Images">
-									<div class="splide__track h-100" style="height: 100%;">
-										<ul class="splide__list h-100" style="height: 100%;">
-											{% for image in images %}
-												<li class="splide__slide h-100">
-													<img class="img-trick" src='{{ image.path }}' alt="">
-												</li>
-											{% endfor %}
-										</ul>
-									</div>
-								</section>
-							</div>
-						{% endif %}
-						{% if movies|length >= 1 %}
-							<div class="col-6">
-								<section id="movie-carousel" class="splide" aria-label="Beautiful Images">
-									<div class="splide__track">
-										<ul class="splide__list">
-											{% for movie in movies %}
-												<li class="splide__slide">
-													{{ movie.html | raw }}
-												</li>
-											{% endfor %}
-										</ul>
-									</div>
-								</section>
-							</div>
-						{% endif %}
-					</div>
-					<hr>
-					<div class="row">
+					<div class="row mt-3">
 						<div class="col-12">
 							<h2>Description</h2>
 							<p>{{ trick.description }}</p>
 						</div>
 					</div>
+					<div class="d-flex mt-3">
+						<ul class="list-inline mx-auto justify-content-center mb-0">
+							<li class="list-inline-item p-3 border rounded">Par :
+								{{author.username}}</li>
+							<li class="list-inline-item p-3 border rounded">Ajouté le :
+								{{ trick.CreationDate|date("d/m/Y") }}</li>
+							<li class="list-inline-item p-3 border rounded">Catégorie :
+								{{ trick.group.name }}</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="card p-4 mt-5">
+					{% if is_granted('ROLE_USER_VALID') %}
+						{{ form_start(commentForm) }}
+						{{ form_row(commentForm.content) }}
+						<button type="submit" class="btn btn-light">Ajouter un commentaire</button>
+						{{ form_end(commentForm) }}
+					{% else %}
+						<div class="card mt-5 p-4">
+							<p class="mb-0">
+								<a href="{{path('app_register')}}">Inscrivez-vous</a>
+								ou
+								<a href="{{path('app_login')}}">connectez vous</a>
+								pour commenter cet article</p>
+						</div>
+					{% endif %}
 				</div>
 
 				{% if commentaires | length > 0 %}
