@@ -1,12 +1,11 @@
-
 a {
     color: #0074D9;
     text-decoration: none;
 }
 
-.hero{
+.hero {
     position: relative;
-    background: linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)), url('/img/snowboard-extreme_2560x1440.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/img/snowboard-extreme_2560x1440.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     height: 100dvh;
@@ -72,8 +71,24 @@ main .img-container img {
 }
 
 /* trick */
-.card {box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px #5a61690f, 0 7px 70px rgba(90, 97, 105, 0.1);}
+.card {
+    box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px #5a61690f, 0 7px 70px rgba(90, 97, 105, 0.1);
+}
 
-.img-featured {width: 100%; object-fit: fill;}
+.img-featured {
+    width: 100%;
+    object-fit: fill;
+}
 
-.splide__slide img {width: 100%; height: 100%; object-fit: cover;}
+.splide__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.trick-title {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1rem;
+}
