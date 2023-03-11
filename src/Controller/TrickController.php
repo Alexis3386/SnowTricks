@@ -32,7 +32,6 @@ class TrickController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
         };
-
         // $trick = $trickRepository->find($id);
         $author = $trick->getUser();
         $pictures = $trick->getPictures();
@@ -48,4 +47,5 @@ class TrickController extends AbstractController
             'commentForm' => $form->createView()
         ]);
     }
+    
 }

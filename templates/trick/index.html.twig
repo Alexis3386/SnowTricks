@@ -8,12 +8,20 @@
 		<div class="row justify-content-center mt-5">
 			<div class="col-md-12">
 				<div class="card mt-5 p-4">
-					<div class="card-img-featured position-relative">
+					<div class="card-img-featured position-relative mb-3">
 						<img class="img-featured" src="{{trick.featuredImage}}" alt="">
+						<div class="edit-link position-absolute">
+							<a href="" class="me-3">
+								<i class="fa-solid fa-trash"></i>
+							</a>
+							<a href="">
+								<i class="fa-solid fa-pen-clip"></i>
+							</a>
+						</div>
 						<h2 class="trick-title position-absolute">{{trick.name | capitalize}}</h2>
 					</div>
 					<hr>
-					<div class="row justify-content-center">
+					<div class="row justify-content-center my-3">
 						{% for picture in pictures %}
 							<div class="col-2">
 								<img style="width: 100%; height: 100%; object-fit: cover;" src="{{picture.path}}" alt="">
@@ -28,7 +36,7 @@
 					<hr>
 					<div class="row mt-3">
 						<div class="col-12">
-							<h2>Description</h2>
+							<h2 class="text-center">Description</h2>
 							<p>{{ trick.description }}</p>
 						</div>
 					</div>
@@ -51,13 +59,11 @@
 						<button type="submit" class="btn btn-light">Ajouter un commentaire</button>
 						{{ form_end(commentForm) }}
 					{% else %}
-						<div class="card mt-5 p-4">
-							<p class="mb-0">
-								<a href="{{path('app_register')}}">Inscrivez-vous</a>
-								ou
-								<a href="{{path('app_login')}}">connectez vous</a>
-								pour commenter cet article</p>
-						</div>
+						<p class="mb-0 text-center">
+							<a href="{{path('app_register')}}">Inscrivez-vous</a>
+							ou
+							<a href="{{path('app_login')}}">connectez vous</a>
+							pour commenter cet article</p>
 					{% endif %}
 				</div>
 
