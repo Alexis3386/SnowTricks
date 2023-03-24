@@ -32,6 +32,7 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/test, roles: ROLE_USER_VALID }
+        - { path: ^/admin/, roles: ROLE_USER_VALID }
         - { path: ^/, roles: PUBLIC_ACCESS }
 
 when@test:

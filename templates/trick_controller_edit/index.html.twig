@@ -10,7 +10,6 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>FeaturedImage</th>
                 <th>Description</th>
                 <th>CreationDate</th>
                 <th>Slug</th>
@@ -22,12 +21,11 @@
             <tr>
                 <td>{{ trick.id }}</td>
                 <td>{{ trick.name }}</td>
-                <td>{{ trick.featuredImage }}</td>
                 <td>{{ trick.description }}</td>
                 <td>{{ trick.creationDate ? trick.creationDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ trick.slug }}</td>
                 <td>
-                    <a href="{{ path('app_trick_controller_edit_edit', {'id': trick.id}) }}">edit</a>
+                    <a href="{{ path('app_trick_controller_edit', {'id': trick.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -38,5 +36,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_trick_controller_edit_new') }}">Create new</a>
+    <a href="{{ path('app_trick_controller_new') }}">Create new</a>
 {% endblock %}

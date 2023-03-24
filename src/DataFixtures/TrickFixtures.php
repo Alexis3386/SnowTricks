@@ -25,7 +25,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $this->faker->seed(3258);
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             AppFixtures::class,
@@ -48,9 +48,9 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
                 $trickName = $this->faker->sentence($this->faker->numberBetween(1, 3));
                 $trick->setName($trickName)
                     ->setDescription($this->faker->text($this->faker->numberBetween(100, 2000), true))
-                    ->setFeaturedImage('/img/Intermediate_to_Advanced_Boarding.jpg')
                     ->setUser($this->faker->randomElement($users))
                     ->setCreationDate($this->faker->dateTimeBetween('-6 month', 'now'))
+                    ->setModificationDate($trick->getCreationDate())
                     ->setSlug($slugger->slug($trickName));
 
                 for ($j = 0; $j < $this->faker->numberBetween(1, 3); $j++) {

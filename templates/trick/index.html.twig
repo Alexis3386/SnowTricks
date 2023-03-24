@@ -4,89 +4,98 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container mt-5">
-		<div class="row justify-content-center mt-5">
-			<div class="col-md-12">
-				<div class="card mt-5 p-4">
-					<div class="card-img-featured position-relative mb-3">
-						<img class="img-featured" src="{{trick.featuredImage}}" alt="">
-						<div class="edit-link position-absolute">
-							<a href="" class="me-3">
-								<i class="fa-solid fa-trash"></i>
-							</a>
-							<a href="">
-								<i class="fa-solid fa-pen-clip"></i>
-							</a>
-						</div>
-						<h2 class="trick-title position-absolute">{{trick.name | capitalize}}</h2>
-					</div>
-					<hr>
-					<div class="row justify-content-center my-3">
-						{% for picture in pictures %}
-							<div class="col-2">
-								<img style="width: 100%; height: 100%; object-fit: cover;" src="{{picture.path}}" alt="">
-							</div>
-						{% endfor %}
-						{% for movie in movies %}
-							<div class="col-2">
-								{{ movie.html | raw }}
-							</div>
-						{% endfor %}
-					</div>
-					<hr>
-					<div class="row mt-3">
-						<div class="col-12">
-							<h2 class="text-center">Description</h2>
-							<p>{{ trick.description }}</p>
-						</div>
-					</div>
-					<div class="d-flex mt-3">
-						<ul class="list-inline mx-auto justify-content-center mb-0">
-							<li class="list-inline-item p-3 border rounded">Par :
-								{{author.username}}</li>
-							<li class="list-inline-item p-3 border rounded">Ajouté le :
-								{{ trick.CreationDate|date("d/m/Y") }}</li>
-							<li class="list-inline-item p-3 border rounded">Catégorie :
-								{{ trick.group.name }}</li>
-						</ul>
-					</div>
-				</div>
+    <div class="container mt-5">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-12">
+                <div class="card mt-5 p-4">
+                    <div class="card-img-featured position-relative mb-3">
+                        {% set featuredImage = pictures.first() %}
+                        <img class="img-featured" src="{{ asset(featuredImage.path) }}" alt="">
+                        {% if is_granted('ROLE_USER_VALID') %}
+                            <div class="edit-link position-absolute">
+                                <form method="post" action="{{ path('app_trick_controller_delete', {'id': trick.id}) }}"
+                                      onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+                                    <button class="btn">Delete</button>
+                                </form>
+                                <a href="">
+                                    <i class="fa-solid fa-pen-clip"></i>
+                                </a>
+                            </div>
+                        {% endif %}
+                        <h2 class="trick-title position-absolute">{{ trick.name | capitalize }}</h2>
+                    </div>
+                    <hr>
+                    <div class="row justify-content-evenly my-3">
+                        {% for picture in pictures %}
+                            <div class="col-2">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     src="{{ asset(picture.path) }}" alt="">
+                            </div>
+                        {% endfor %}
+                        {% for movie in movies %}
+                            <div class="col-2">
+                                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ movie.code }}"
+                                        title="YouTube video player"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowfullscreen></iframe>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <hr>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h2 class="text-center">Description</h2>
+                            <p>{{ trick.description }}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mt-3">
+                        <ul class="list-inline mx-auto justify-content-center mb-0">
+                            <li class="list-inline-item p-3 border rounded">Par :
+                                {{ author.username }}</li>
+                            <li class="list-inline-item p-3 border rounded">Ajouté le :
+                                {{ trick.CreationDate|date("d/m/Y") }}</li>
+                            <li class="list-inline-item p-3 border rounded">Catégorie :
+                                {{ trick.group.name }}</li>
+                        </ul>
+                    </div>
+                </div>
 
-				<div class="card p-4 mt-5">
-					{% if is_granted('ROLE_USER_VALID') %}
-						{{ form_start(commentForm) }}
-						{{ form_row(commentForm.content) }}
-						<button type="submit" class="btn btn-light">Ajouter un commentaire</button>
-						{{ form_end(commentForm) }}
-					{% else %}
-						<p class="mb-0 text-center">
-							<a href="{{path('app_register')}}">Inscrivez-vous</a>
-							ou
-							<a href="{{path('app_login')}}">connectez vous</a>
-							pour commenter cet article</p>
-					{% endif %}
-				</div>
+                <div class="card p-4 mt-5">
+                    {% if is_granted('ROLE_USER_VALID') %}
+                        {{ form_start(commentForm) }}
+                        {{ form_row(commentForm.content) }}
+                        <button type="submit" class="btn btn-light">Ajouter un commentaire</button>
+                        {{ form_end(commentForm) }}
+                    {% else %}
+                        <p class="mb-0 text-center">
+                            <a href="{{ path('app_register') }}">Inscrivez-vous</a>
+                            ou
+                            <a href="{{ path('app_login') }}">connectez vous</a>
+                            pour commenter cet article</p>
+                    {% endif %}
+                </div>
 
-				{% if commentaires | length > 0 %}
-					<div class="card comment mt-5 p-5">
-						{% for commentaire in commentaires %}
-							<div>
-								<div class="d-flex align-items-center">
-									<h3 class="me-2">{{commentaire.user.username}}</h3>
-									<small>{{commentaire.creationDate | date("d/m/Y")}}</small>
-								</div>
-								<p>{{commentaire.Content}}</p>
-							</div>
-						{% endfor %}
-					</div>
-				{% else %}
-					<div>
-						<p>Pas encore de commentaire pour cette figure,
-							<a href="{{path('register')}}">inscrivez-vous</a>
-						</p>
-					</div>
-				{% endif %}
-			</div>
-		</div>
-	</div>
+                {% if comments | length > 0 %}
+                    <div class="card comment mt-5 p-5">
+                        {% for comment in comments %}
+                            <div>
+                                <div class="d-flex align-items-center">
+                                    <h3 class="me-2">{{ comment.user.username }}</h3>
+                                    <small>{{ comment.creationDate | date("d/m/Y") }}</small>
+                                </div>
+                                <p>{{ comment.Content }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="card comment mt-5 p-4">
+                        <p class="mb-0">Pas encore de commentaire pour cette figure,
+                            <a href="{{ path('app_register') }}">inscrivez-vous</a>
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
