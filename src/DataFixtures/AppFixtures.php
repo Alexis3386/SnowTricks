@@ -24,7 +24,7 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setEmail('user@test.com')
             ->setUsername('Alex')
-            ->setPathPhoto('chemin/test')
+            ->setPathPhoto('img/defaultavatar.png')
             ->setPassword($this->paswordHasher->hashPassword($user, 'password'));
         $manager->persist($user);
 
@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail($this->faker->safeEmail())
                 ->setUsername($this->faker->firstName())
-                ->setPathPhoto('chemin/test')
+                ->setPathPhoto('img/defaultavatar.png')
                 ->setPassword($this->paswordHasher->hashPassword($user, 'password'));
             $manager->persist($user);
         }

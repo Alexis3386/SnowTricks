@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Trick{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center">Editer la figure</h1>
+
+        {{ include('trick_controller_edit/_form.html.twig', {'button_label': 'Update'}) }}
+
+        <a href="{{ path('app_trick_controller_index') }}">back to list</a>
+
+        {{ include('trick_controller_edit/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

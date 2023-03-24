@@ -20,7 +20,7 @@ class Group
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'group', targetEntity: Trick::class)]
-    private Collection $Tricks;
+    private Collection $tricks;
 
     public function __construct()
     {
@@ -67,5 +67,9 @@ class Group
         $this->Tricks->removeElement($trick);
 
         return $this;
+    }
+    // Register Magic Method to Print the name of the State e.g California
+    public function __toString() {
+        return $this->name;
     }
 }

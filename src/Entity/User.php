@@ -38,7 +38,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private Collection $userComment;
 
     #[ORM\OneToMany(targetEntity: Trick::class, mappedBy: 'user')]
-    private Collection $Tricks;
+    private Collection $tricks;
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
@@ -216,5 +216,9 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         }
 
         return $this;
+    }
+
+    public function __toString() {
+        return $this->username;
     }
 }

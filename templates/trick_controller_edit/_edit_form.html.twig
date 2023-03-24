@@ -1,0 +1,20 @@
+<div class="container">
+
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.group) }}
+    {{ form_row(form.pictures) }}
+
+    {{ form_label(form.movies) }}
+    <ul class="movie"
+        data-index="{{ form.movies|length > 0 ? form.movies|last.vars.name + 1 : 0 }}"
+        data-prototype="{{ form_widget(form.movies.vars.prototype)|e('html_attr') }}"
+    ></ul>
+    <button type="button" class="add_item_link" data-collection-holder-class="movie">Ajouter un film (embed iframe)
+    </button>
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+
+</div>

@@ -32,19 +32,18 @@ class TrickController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
         };
-
         // $trick = $trickRepository->find($id);
         $author = $trick->getUser();
         $pictures = $trick->getPictures();
         $movies = $trick->getMovies();
-        $commentaires = $trick->getComments();
+        $comments = $trick->getComments();
 
         return $this->render('trick/index.html.twig', [
             'trick' => $trick,
             'author' => $author,
             'pictures' => $pictures,
             'movies' => $movies,
-            'commentaires' => $commentaires,
+            'comments' => $comments,
             'commentForm' => $form->createView()
         ]);
     }

@@ -8,8 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[UniqueEntity('name')]
 class Trick
 {
     #[Groups(['accueil'])]
@@ -21,38 +24,56 @@ class Trick
     #[ORM\Column()]
     private string $name;
 
-    #[ORM\Column()]
-    private string $featuredImage;
-
     #[ORM\Column(type: Types::TEXT)]
     private string $description;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, cascade: ['remove'])]
     #[ORM\OrderBy(["creationDate" => "DESC"])]
     private Collection $comments;
 
-    #[ORM\ManyToOne(inversedBy: 'group')]
+    #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'tricks')]
     private ?Group $group = null;
 
-    #[ORM\ManyToOne(inversedBy: 'user')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tricks')]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist', 'remove'])]
     private Collection $pictures;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Movie::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Movie::class, cascade: ['persist', 'remove'])]
     private Collection $movies;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $modificationDate = null;
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getModificationDate(): ?DateTimeInterface
+    {
+        return $this->modificationDate;
+    }
+
+    /**
+     * @param DateTimeInterface|null $modificationDate
+     * @return Trick
+     */
+    public function setModificationDate(?DateTimeInterface $modificationDate): self
+    {
+        $this->modificationDate = $modificationDate;
+        return $this;
+    }
+
     #[ORM\Column(unique: true)]
     private string $slug;
+
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        $this->trickGroups = new ArrayCollection();
         $this->pictures = new ArrayCollection();
         $this->movies = new ArrayCollection();
     }
@@ -70,18 +91,6 @@ class Trick
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getFeaturedImage(): string
-    {
-        return $this->featuredImage;
-    }
-
-    public function setFeaturedImage(string $featuredImage): self
-    {
-        $this->featuredImage = $featuredImage;
 
         return $this;
     }
