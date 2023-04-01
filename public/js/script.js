@@ -38,7 +38,8 @@ const addFormToCollection = (e) => {
 
 const addTagFormDeleteLink = (item) => {
     const removeFormButton = document.createElement('button');
-    removeFormButton.innerText = 'Delete this tag';
+    removeFormButton.classList.add('btn', 'btn-primary');
+    removeFormButton.innerText = 'Supprimer la vidéo';
 
     item.append(removeFormButton);
 
@@ -60,3 +61,20 @@ document
     .forEach((tag) => {
         addTagFormDeleteLink(tag)
     })
+
+// add more trick
+
+let commentContainer = document.querySelector("#comment")
+let btn = document.querySelector("#load-more")
+btn.addEventListener('click', function (e) {
+    e.preventDefault();
+    fetch(this.getAttribute("href"), {
+            method: "POST" ,
+            body: JSON.stringify({page : this.getAttribute('data-page')})
+        },
+    ).then(function (response) {
+        return response.text();
+    }).then(function (html) {
+        commentContainer.insertAdjacentHTML('beforeend', html);
+    })
+})

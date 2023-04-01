@@ -76,25 +76,10 @@
                     {% endif %}
                 </div>
 
-                {% if comments | length > 0 %}
-                    <div class="card comment mt-5 p-5">
-                        {% for comment in comments %}
-                            <div>
-                                <div class="d-flex align-items-center">
-                                    <h3 class="me-2">{{ comment.user.username }}</h3>
-                                    <small>{{ comment.creationDate | date("d/m/Y") }}</small>
-                                </div>
-                                <p>{{ comment.Content }}</p>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <div class="card comment mt-5 p-4">
-                        <p class="mb-0">Pas encore de commentaire pour cette figure,
-                            <a href="{{ path('app_register') }}">inscrivez-vous</a>
-                        </p>
-                    </div>
-                {% endif %}
+                <div id="comment">
+                    {{ firts_comments.content | raw }}
+                </div>
+                <a id="load-more" href="{{ path('comment', {'id': trick.id}) }}" data-page="2">Load more</a>
             </div>
         </div>
     </div>

@@ -46,7 +46,6 @@ main .img-container img {
 }
 
 
-
 .card-trick .img-container img {
     height: 12rem;
     object-fit: fill;
@@ -110,4 +109,10 @@ main .img-container img {
     -moz-border-radius: 7px;
     -ms-border-radius: 7px;
     -o-border-radius: 7px;
+}
+
+/* formulaire */
+
+#trick_description {
+    height: 140px;
 }

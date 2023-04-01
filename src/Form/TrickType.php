@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-
 use App\Entity\Group;
 use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -19,14 +18,14 @@ class TrickType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'nom de la figure',
+                'label' => 'Nom de la figure',
             ])
             ->add('description')
             ->add('group', EntityType::class, [
                 'class' => Group::class
             ])
             ->add('pictures', FileType::class, [
-                'label' => 'photos',
+                'label' => 'Photos',
                 'multiple' => true,
                 'mapped' => false,
                 'required' => false
