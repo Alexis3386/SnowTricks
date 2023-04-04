@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -42,18 +44,20 @@ class TrickRepository extends ServiceEntityRepository
     public function paginationQuery()
     {
         return $this->createQueryBuilder('t')
-           ->getQuery()
-        ;
+            ->getQuery();
     }
 
-   public function getNumberOfTricks(): int
-   {
-       return $this->createQueryBuilder('t')
-       ->select('count(t.id)')
-       ->getQuery()
-       ->getSingleScalarResult();
-   }
-
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function getNumberOfTricks(): int
+    {
+        return $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
 //    public function findOneBySomeField($value): ?Trick
 //    {

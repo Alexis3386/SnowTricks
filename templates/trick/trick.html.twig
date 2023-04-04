@@ -7,7 +7,7 @@
     <div class="container mt-5">
         <div class="row justify-content-center mt-5">
             <div class="col-md-12">
-                <div class="card mt-5 p-4">
+                <div class="card shadow mt-5 p-4">
                     <div class="card-img-featured position-relative mb-3">
                         {% set featuredImage = pictures.first() %}
                         <img class="img-featured" src="{{ asset(featuredImage.path) }}" alt="">
@@ -61,7 +61,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4 mt-5">
+                <div class="card shadow p-4 mt-5">
                     {% if is_granted('ROLE_USER_VALID') %}
                         {{ form_start(commentForm) }}
                         {{ form_row(commentForm.content) }}
@@ -76,10 +76,11 @@
                     {% endif %}
                 </div>
 
-                <div id="comment">
+                <div id="comment" class="card shadow comment mt-5 p-5">
                     {{ firts_comments.content | raw }}
                 </div>
-                <a id="load-more" href="{{ path('comment', {'id': trick.id}) }}" data-page="2">Load more</a>
+                <a id="load-more" class="text-center d-block mt-2" href="{{ path('comment', {'id': trick.id}) }}" data-page="2"
+                   data-number-of-pages="{{ number_of_pages }}"><i class="fas fa-plus-circle fa-3x"></i></a>
             </div>
         </div>
     </div>

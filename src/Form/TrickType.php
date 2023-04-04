@@ -22,7 +22,8 @@ class TrickType extends AbstractType
             ])
             ->add('description')
             ->add('group', EntityType::class, [
-                'class' => Group::class
+                'class' => Group::class,
+                'label' => 'Groupe'
             ])
             ->add('pictures', FileType::class, [
                 'label' => 'Photos',

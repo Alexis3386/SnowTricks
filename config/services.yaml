@@ -13,6 +13,7 @@ services:
         bind:
             $sender_email: '%env(SENDER_MAIL)%'
             $public_directory: '%kernel.project_dir%/public'
+            $number_comment_by_page: 5
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

@@ -69,12 +69,17 @@ let btn = document.querySelector("#load-more")
 btn.addEventListener('click', function (e) {
     e.preventDefault();
     fetch(this.getAttribute("href"), {
-            method: "POST" ,
-            body: JSON.stringify({page : this.getAttribute('data-page')})
+            method: "POST",
+            body: JSON.stringify({page: this.getAttribute('data-page')})
         },
     ).then(function (response) {
         return response.text();
-    }).then(function (html) {
+    }).then(html => {
+        console.log(this);
+        if (this.getAttribute('data-page') >= this.getAttribute('data-number-of-pages')) {
+            this.style.display = 'none'
+        }
+        this.setAttribute('data-page', parseInt(this.getAttribute('data-page'), 10) + 1)
         commentContainer.insertAdjacentHTML('beforeend', html);
     })
 })

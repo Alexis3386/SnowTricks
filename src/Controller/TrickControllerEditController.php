@@ -11,6 +11,7 @@ use App\Entity\Picture;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,7 +54,7 @@ class TrickControllerEditController extends AbstractController
 
         return $this->render('trick_controller_edit/new.html.twig', [
             'trick' => $trick,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -67,10 +68,8 @@ class TrickControllerEditController extends AbstractController
     {
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
-
         $movies = $trick->getMovies();
         $pictures = $trick->getPictures();
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->processImage($form, $public_directory, $trick);
             $em->flush();
@@ -80,7 +79,7 @@ class TrickControllerEditController extends AbstractController
 
         return $this->render('trick_controller_edit/edit.html.twig', [
             'trick' => $trick,
-            'form' => $form,
+            'form' => $form->createView(),
             'movies' => $movies,
             'pictures' => $pictures,
         ]);
@@ -125,7 +124,7 @@ class TrickControllerEditController extends AbstractController
         return new JsonResponse(['error' => 'Token ivalide'], 400);
     }
 
-    private function processImage(\Symfony\Component\Form\FormInterface $form, string $public_directory, Trick $trick): void
+    private function processImage(FormInterface $form, string $public_directory, Trick $trick): void
     {
         $pictures = $form->get('pictures')->getData();
 
