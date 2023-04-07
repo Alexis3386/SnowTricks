@@ -42,6 +42,7 @@ class TrickControllerEditController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->processImage($form, $public_directory, $trick);
+            $this->processMovie($form, $trick);
 
             $trick->setSlug($slugger->slug($form->get('name')->getData()));
             $trick->setCreationDate(new DateTime('now'));
@@ -61,7 +62,6 @@ class TrickControllerEditController extends AbstractController
     #[Route('/{id}/edit', name: 'app_trick_controller_edit', methods: ['GET', 'POST'])]
     public function edit(Request                $request,
                          Trick                  $trick,
-                         TrickRepository        $trickRepository,
                          int                    $id,
                          string                 $public_directory,
                          EntityManagerInterface $em): Response
@@ -70,8 +70,10 @@ class TrickControllerEditController extends AbstractController
         $form->handleRequest($request);
         $movies = $trick->getMovies();
         $pictures = $trick->getPictures();
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->processImage($form, $public_directory, $trick);
+            $this->processMovie($form, $trick);
             $em->flush();
 
             return $this->redirectToRoute('app_trick_controller_edit', ["id" => $id], Response::HTTP_SEE_OTHER);
@@ -139,6 +141,15 @@ class TrickControllerEditController extends AbstractController
             $pic = new Picture();
             $pic->setPath('/uploads/' . $file);
             $trick->addPicture($pic);
+        }
+    }
+
+    private function processMovie(FormInterface $form, Trick $trick): void
+    {
+        $movies = $form->get('movies')->getData();
+
+        foreach ($movies as $movie) {
+            $trick->addMovie($movie);
         }
     }
 }

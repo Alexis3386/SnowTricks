@@ -63,7 +63,6 @@ document
     })
 
 // add more trick
-
 let commentContainer = document.querySelector("#comment")
 let btn = document.querySelector("#load-more")
 btn.addEventListener('click', function (e) {
@@ -75,9 +74,8 @@ btn.addEventListener('click', function (e) {
     ).then(function (response) {
         return response.text();
     }).then(html => {
-        console.log(this);
         if (this.getAttribute('data-page') >= this.getAttribute('data-number-of-pages')) {
-            this.style.display = 'none'
+            this.style.setProperty('display', 'none', 'important')
         }
         this.setAttribute('data-page', parseInt(this.getAttribute('data-page'), 10) + 1)
         commentContainer.insertAdjacentHTML('beforeend', html);

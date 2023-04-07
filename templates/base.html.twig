@@ -22,6 +22,7 @@
 		{% endblock %}
 	</head>
 	<body>
+	{% include 'include/_header.html.twig' %}
 		<div class="container">
 			{% for type, messages in app.session.flashbag.all %}
 				{% for message in messages %}

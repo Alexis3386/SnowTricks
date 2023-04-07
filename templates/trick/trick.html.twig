@@ -13,12 +13,9 @@
                         <img class="img-featured" src="{{ asset(featuredImage.path) }}" alt="">
                         {% if is_granted('ROLE_USER_VALID') %}
                             <div class="edit-link position-absolute">
-                                <form method="post" action="{{ path('app_trick_controller_delete', {'id': trick.id}) }}"
-                                      onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
-                                    <button class="btn">Delete</button>
-                                </form>
-                                <a href="">
+                                <a href="{{ path('app_trick_controller_delete', {'_token' : csrf_token('delete' ~ trick.id), id:trick.id} ) }}"><i
+                                            class="fa-solid fa-trash"></i></a>
+                                <a href="{{ path('app_trick_controller_edit', {'id' : trick.id}) }}">
                                     <i class="fa-solid fa-pen-clip"></i>
                                 </a>
                             </div>
@@ -79,8 +76,11 @@
                 <div id="comment" class="card shadow comment mt-5 p-5">
                     {{ firts_comments.content | raw }}
                 </div>
-                <a id="load-more" class="text-center d-block mt-2" href="{{ path('comment', {'id': trick.id}) }}" data-page="2"
-                   data-number-of-pages="{{ number_of_pages }}"><i class="fas fa-plus-circle fa-3x"></i></a>
+                {% if number_of_pages > 1 %}
+                    <a id="load-more" class="text-center d-block mt-2" href="{{ path('comment', {'id': trick.id}) }}"
+                       data-page="2"
+                       data-number-of-pages="{{ number_of_pages }}"><i class="fas fa-plus-circle fa-3x"></i></a>
+                {% endif %}
             </div>
         </div>
     </div>
