@@ -23,7 +23,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private string $username;
 
     #[ORM\Column(length: 180, unique: true)]
-    private $email;
+    private ?string $email;
 
     #[ORM\Column]
     private array $roles = [];
@@ -41,7 +41,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private Collection $tricks;
 
     #[ORM\Column(type: 'boolean')]
-    private $isVerified = false;
+    private bool $isVerified = false;
 
     #[ORM\Column(nullable: true)]
     private ?string $token = null;

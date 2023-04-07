@@ -7,18 +7,15 @@
     <div class="container mt-5">
         <div class="row justify-content-center mt-5">
             <div class="col-md-12">
-                <div class="card mt-5 p-4">
+                <div class="card shadow mt-5 p-4">
                     <div class="card-img-featured position-relative mb-3">
                         {% set featuredImage = pictures.first() %}
                         <img class="img-featured" src="{{ asset(featuredImage.path) }}" alt="">
                         {% if is_granted('ROLE_USER_VALID') %}
                             <div class="edit-link position-absolute">
-                                <form method="post" action="{{ path('app_trick_controller_delete', {'id': trick.id}) }}"
-                                      onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
-                                    <button class="btn">Delete</button>
-                                </form>
-                                <a href="">
+                                <a href="{{ path('app_trick_controller_delete', {'_token' : csrf_token('delete' ~ trick.id), id:trick.id} ) }}"><i
+                                            class="fa-solid fa-trash"></i></a>
+                                <a href="{{ path('app_trick_controller_edit', {'id' : trick.id}) }}">
                                     <i class="fa-solid fa-pen-clip"></i>
                                 </a>
                             </div>
@@ -61,7 +58,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4 mt-5">
+                <div class="card shadow p-4 mt-5">
                     {% if is_granted('ROLE_USER_VALID') %}
                         {{ form_start(commentForm) }}
                         {{ form_row(commentForm.content) }}
@@ -76,24 +73,13 @@
                     {% endif %}
                 </div>
 
-                {% if comments | length > 0 %}
-                    <div class="card comment mt-5 p-5">
-                        {% for comment in comments %}
-                            <div>
-                                <div class="d-flex align-items-center">
-                                    <h3 class="me-2">{{ comment.user.username }}</h3>
-                                    <small>{{ comment.creationDate | date("d/m/Y") }}</small>
-                                </div>
-                                <p>{{ comment.Content }}</p>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <div class="card comment mt-5 p-4">
-                        <p class="mb-0">Pas encore de commentaire pour cette figure,
-                            <a href="{{ path('app_register') }}">inscrivez-vous</a>
-                        </p>
-                    </div>
+                <div id="comment" class="card shadow comment mt-5 p-5">
+                    {{ firts_comments.content | raw }}
+                </div>
+                {% if number_of_pages > 1 %}
+                    <a id="load-more" class="text-center d-block mt-2" href="{{ path('comment', {'id': trick.id}) }}"
+                       data-page="2"
+                       data-number-of-pages="{{ number_of_pages }}"><i class="fas fa-plus-circle fa-3x"></i></a>
                 {% endif %}
             </div>
         </div>

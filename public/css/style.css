@@ -46,7 +46,6 @@ main .img-container img {
 }
 
 
-
 .card-trick .img-container img {
     height: 12rem;
     object-fit: fill;
@@ -71,7 +70,7 @@ main .img-container img {
 }
 
 /* trick */
-.card {
+.card.shadow {
     box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px #5a61690f, 0 7px 70px rgba(90, 97, 105, 0.1);
 }
 
@@ -110,4 +109,18 @@ main .img-container img {
     -moz-border-radius: 7px;
     -ms-border-radius: 7px;
     -o-border-radius: 7px;
+}
+
+/* formulaire */
+
+#trick_description {
+    height: 140px;
+}
+
+/* navbar */
+
+a.link {
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: bold;
 }
