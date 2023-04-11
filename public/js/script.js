@@ -29,6 +29,7 @@ const addFormToCollection = (e) => {
             collectionHolder.dataset.index
         );
 
+    item.classList.add('list-group-item', 'list-unstyled');
     collectionHolder.appendChild(item);
 
     collectionHolder.dataset.index++;
@@ -39,7 +40,7 @@ const addFormToCollection = (e) => {
 const addTagFormDeleteLink = (item) => {
     const removeFormButton = document.createElement('button');
     removeFormButton.classList.add('btn', 'btn-primary');
-    removeFormButton.innerText = 'Supprimer la vidéo';
+    removeFormButton.innerText = 'Supprimer';
 
     item.append(removeFormButton);
 
