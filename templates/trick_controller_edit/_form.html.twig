@@ -35,35 +35,50 @@
     {% endif %}
 </div>
 
+<div class="accordion" id="accordion-movie">
+    <div class="accordio-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">Ajouter une vidéo
+            </button>
+        </h2>
+    </div>
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+         data-bs-parent="#accordion-movie">
 
-<div class="card">
-    <ul class="movie"
-        data-index="{{ form.movies|length > 0 ? form.movies|last.vars.name + 1 : 0 }}"
-        data-prototype="{{ form_widget(form.movies.vars.prototype)|e('html_attr') }}"
-    ></ul>
-    <button type="button" class="add_item_link btn btn-primary" data-collection-holder-class="movie">Ajouter un film
-    </button>
-
-    {% if app.request.attributes.get('_route') == 'app_trick_controller_edit' %}
-        {% if movies | length >=1 %}
-            <div class="row mb-5">
-                {% for movie in movies %}
-                    <div class="col-2">
-                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ movie.code }}"
-                                title="YouTube video player"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen></iframe>
-                        <a href="{{ path('app_trick_controller_delete_movie', {id: movie.id}) }}" data-delete
-                           data-token="{{ csrf_token('delete' ~ movie.id) }}">supprimer</a>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endif %}
+        <div class="accordion-body">
+            <ul class="movie list-group"
+                data-index="{{ form.movies|length > 0 ? form.movies|last.vars.name + 1 : 0 }}"
+                data-prototype="{{ form_widget(form.movies.vars.prototype)|e('html_attr') }}"
+            ></ul>
+            <button type="button" class="add_item_link btn btn-primary" data-collection-holder-class="movie">Ajouter une
+                vidéo
+            </button>
+        </div>
+    </div>
 </div>
 
+{% if app.request.attributes.get('_route') == 'app_trick_controller_edit' %}
+    {% if movies | length >=1 %}
+        <div class="row mb-5">
+            {% for movie in movies %}
+                <div class="col-2">
+                    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ movie.code }}"
+                            title="YouTube video player"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen></iframe>
+                    <a href="{{ path('app_trick_controller_delete_movie', {id: movie.id}) }}" data-delete
+                       data-token="{{ csrf_token('delete' ~ movie.id) }}">supprimer</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}
 
-{% do form.movies.setRendered() %}
+
+
+
+    {% do form.movies.setRendered() %}
 
 <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
