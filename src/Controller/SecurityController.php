@@ -21,13 +21,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
-
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
@@ -41,12 +35,13 @@ class SecurityController extends AbstractController
 
     #[Route(path: '/forgot-password', name: 'forgot_password')]
     public function forgotPassword(
-        Request $request,
-        UserRepository $userRepository,
+        Request                 $request,
+        UserRepository          $userRepository,
         TokenGeneratorInterface $tokenGenerator,
-        EntityManagerInterface $entityManager,
-        MailerService $mail
-    ): Response {
+        EntityManagerInterface  $entityManager,
+        MailerService           $mail
+    ): Response
+    {
         $form = $this->createForm(ResetPasswordRequestType::class);
 
         $form->handleRequest($request);
@@ -87,18 +82,19 @@ class SecurityController extends AbstractController
 
     #[Route(path: '/forgot-password/{token}', name: 'reset_password')]
     public function resetPassword(
-        string $token,
-        Request $request,
-        UserRepository $userRepository,
-        EntityManagerInterface $entityManager,
+        string                      $token,
+        Request                     $request,
+        UserRepository              $userRepository,
+        EntityManagerInterface      $entityManager,
         UserPasswordHasherInterface $userPasswordHasher
-    ): Response {
+    ): Response
+    {
         $user = $userRepository->findOneByResetToken($token);
         if ($user !== null) {
             $form = $this->createForm(ResetPasswordType::class);
             $form->handleRequest($request);
 
-            if($form->isSubmitted() && $form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) {
                 $user->setResetToken('');
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(

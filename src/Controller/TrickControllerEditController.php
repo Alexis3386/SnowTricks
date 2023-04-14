@@ -66,6 +66,7 @@ class TrickControllerEditController extends AbstractController
                          string                 $public_directory,
                          EntityManagerInterface $em): Response
     {
+
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
         $movies = $trick->getMovies();
@@ -74,6 +75,7 @@ class TrickControllerEditController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->processImage($form, $public_directory, $trick);
             $this->processMovie($form, $trick);
+            $trick->setModificationDate(new DateTime('now'));
             $em->flush();
 
             return $this->redirectToRoute('app_trick_controller_edit', ["id" => $id], Response::HTTP_SEE_OTHER);
@@ -99,7 +101,7 @@ class TrickControllerEditController extends AbstractController
     }
 
     #[Route('/{id}/delete_picture/', name: 'app_trick_controller_delete_picture', methods: ['DELETE'])]
-    public function delete_picture(Request $request, Picture $picture, PictureRepository $pictureRepository): JsonResponse
+    public function deletePicture(Request $request, Picture $picture, PictureRepository $pictureRepository): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -113,7 +115,7 @@ class TrickControllerEditController extends AbstractController
     }
 
     #[Route('/{id}/delete_movie/', name: 'app_trick_controller_delete_movie', methods: ['DELETE'])]
-    public function delete_movie(Request $request, Movie $movie, MovieRepository $pictureRepository): JsonResponse
+    public function deleteMovie(Request $request, Movie $movie, MovieRepository $pictureRepository): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
