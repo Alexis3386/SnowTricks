@@ -51,7 +51,11 @@
                             <li class="list-inline-item p-3 border rounded">Par :
                                 {{ author.username }}</li>
                             <li class="list-inline-item p-3 border rounded">Ajouté le :
-                                {{ trick.CreationDate|date("d/m/Y") }}</li>
+                                {{ trick.creationDate|date("d/m/Y") }}</li>
+                            {% if trick.creationDate != trick.modificationDate %}
+                                <li class="list-inline-item p-3 border rounded">Modifié le :
+                                    {{ trick.modificationDate|date("d/m/Y") }}</li>
+                            {% endif %}
                             <li class="list-inline-item p-3 border rounded">Catégorie :
                                 {{ trick.group.name }}</li>
                         </ul>

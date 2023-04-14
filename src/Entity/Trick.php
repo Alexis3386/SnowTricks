@@ -200,7 +200,6 @@ class Trick
     public function removeMovie(Movie $movie): self
     {
         if ($this->movies->removeElement($movie)) {
-            // set the owning side to null (unless already changed)
             if ($movie->getTrick() === $this) {
                 $movie->setTrick(null);
             }
