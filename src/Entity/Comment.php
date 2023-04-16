@@ -20,7 +20,7 @@ class Comment
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userComment')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'userComment')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 

@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Repository\GroupRepository;
 use Faker\Factory;
 use Faker\Generator;
 use App\Entity\Group;
@@ -19,7 +20,8 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 {
     private Generator $faker;
 
-    public function __construct(private UserRepository $userRepository)
+    public function __construct(private readonly UserRepository  $userRepository,
+                                private readonly GroupRepository $groupRepository)
     {
         $this->faker = Factory::create('fr_FR');
         $this->faker->seed(3258);
@@ -29,6 +31,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             AppFixtures::class,
+            GroupFixtures::class
         ];
     }
 
@@ -36,11 +39,14 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
     {
         $manager->getConnection()->getConfiguration()->setSQLLogger(null);
         $slugger = new AsciiSlugger();
-        $groups = ['Grab', 'Rotation', 'Flip', 'Rotations désaxées', 'Slide'];
-        foreach ($groups as $groupName) {
-            $users = $this->userRepository->findAll();
+        $groups = $this->groupRepository->findAll();
+        $users = $this->userRepository->findAll();
+        $imagesPath = ['/img/figure1.jpg', '/img/figure2.jpg', '/img/figure3.jpg', '/img/figure4.jpg', '/img/figure5.jpg'];
+        $moviesCode = ['_8TBfD5VPnM', '8KotvBY28Mo', 'V9xuy-rVj9w', 'h70kgLV2_Vg', 'QMrelVooJR4'];
+
+        foreach ($groups as $groupSelect) {
             $group = new Group();
-            $group->setName($groupName);
+            $group->setName($groupSelect->getName());
             $manager->persist($group);
 
             for ($i = 0; $i < 5; $i++) {
@@ -55,18 +61,17 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 
                 for ($j = 0; $j < $this->faker->numberBetween(1, 3); $j++) {
                     $picture = new Picture();
-                    $picture->setPath('/img/placeholder.jpg');
+                    $picture->setPath($this->faker->randomElement($imagesPath));
                     $manager->persist($picture);
                     $trick->addPicture($picture);
                 }
 
                 for ($j = 0; $j < $this->faker->numberBetween(1, 3); $j++) {
                     $movie = new Movie();
-                    $movie->setHtml('<iframe width="100%" height="100%" src="https://www.youtube.com/embed/NpEaa2P7qZI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>');
+                    $movie->setCode($this->faker->randomElement($moviesCode));
                     $manager->persist($movie);
                     $trick->addMovie($movie);
                 }
-
 
                 $manager->persist($trick);
 
@@ -83,7 +88,6 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
                 $group->addTrick($trick);
             }
             $manager->flush();
-            $manager->clear();
         }
     }
 }
