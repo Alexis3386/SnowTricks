@@ -5,7 +5,7 @@ a {
 
 .hero {
     position: relative;
-    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/img/snowboard-extreme_2560x1440.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/img/figure4.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     height: calc(100dvh - 72px);
