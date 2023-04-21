@@ -82,7 +82,7 @@ class TrickController extends AbstractController
             $page,
             $number_comment_by_page
         );
-        return new Response($contents = $this->renderView('trick/commentaires.html.twig',
+        return new Response($this->renderView('trick/commentaires.html.twig',
             ['pagination' => $pagination]
         ));
     }

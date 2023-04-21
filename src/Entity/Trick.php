@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
@@ -21,7 +21,7 @@ class Trick
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column()]
+    #[ORM\Column(unique: true)]
     private string $name;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -49,27 +49,20 @@ class Trick
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $modificationDate = null;
 
-    /**
-     * @return DateTimeInterface|null
-     */
+    #[ORM\Column(unique: true)]
+    private string $slug;
+
+
     public function getModificationDate(): ?DateTimeInterface
     {
         return $this->modificationDate;
     }
 
-    /**
-     * @param DateTimeInterface|null $modificationDate
-     * @return Trick
-     */
     public function setModificationDate(?DateTimeInterface $modificationDate): self
     {
         $this->modificationDate = $modificationDate;
         return $this;
     }
-
-    #[ORM\Column(unique: true)]
-    private string $slug;
-
 
     public function __construct()
     {

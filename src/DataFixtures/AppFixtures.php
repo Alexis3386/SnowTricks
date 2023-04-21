@@ -25,7 +25,7 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
         $user = new User();
         $user->setEmail('user@test.com')
             ->setUsername('Alex')
-            ->setPathPhoto('img/defaultavatar.png')
+            ->setPathPhoto('/img/defaultavatar.png')
             ->setPassword($this->paswordHasher->hashPassword($user, 'password'));
         $manager->persist($user);
 
@@ -33,7 +33,7 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
             $user = new User();
             $user->setEmail($this->faker->safeEmail())
                 ->setUsername($this->faker->firstName())
-                ->setPathPhoto('img/defaultavatar.png')
+                ->setPathPhoto('/img/defaultavatar.png')
                 ->setPassword($this->paswordHasher->hashPassword($user, 'password'));
             $manager->persist($user);
         }
@@ -41,9 +41,8 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
         $manager->flush();
     }
 
-    public
-    static function getGroups(): array
+    public static function getGroups(): array
     {
-        return ['groupFixture'];
+        return [];
     }
 }

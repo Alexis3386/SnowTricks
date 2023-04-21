@@ -93,10 +93,6 @@ main .img-container img {
     background-color: azure;
     opacity: 0.8;
     border-radius: 7px;
-    -webkit-border-radius: 7px;
-    -moz-border-radius: 7px;
-    -ms-border-radius: 7px;
-    -o-border-radius: 7px;
 }
 
 .edit-link {
@@ -105,10 +101,6 @@ main .img-container img {
     background-color: azure;
     padding: 0.7rem 1rem;
     border-radius: 7px;
-    -webkit-border-radius: 7px;
-    -moz-border-radius: 7px;
-    -ms-border-radius: 7px;
-    -o-border-radius: 7px;
 }
 
 /* formulaire */

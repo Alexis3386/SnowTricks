@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre profil
+{% endblock %}
+
+{% block body %}
+    <div class="container my-3">
+        <h1 class="mb-3">Bienvenue sur votre profil {{ user.username }}</h1>
+        <h2 class="mb-3">Ajouter ou modifier votre image de profil</h2>
+        <div class="row align-items-center">
+            <div class="col-12 col-md-2">
+                {% if(user.pathPhoto is not empty ) %}
+                    <div class="">
+                        <img class="img-fluid" src="{{ asset(user.pathPhoto) }}" alt="avatar">
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-12 col-md-10">
+                <div class="card p-3 my-3">
+                    <form action="{{ path('profil') }}" method="post" enctype="multipart/form-data">
+                        <label class="form-label">Ajouter, modifier votre photo de profil</label>
+                        <input class="form-control mb-3" type="file"
+                               id="avatar" name="avatar"
+                               accept="image/png, image/jpeg">
+                        <button type="submit" class="btn btn-primary">enregistrer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% if comments is not empty %}
+            <h2>Vos commentaires</h2>
+            <div class="card p-2">
+                {% for comment in comments %}
+                    <div class="border-bottom d-flex align-items-center">
+                        <div class="me-3">
+                            <h3 class="me-2">{{ comment.user.username }}</h3>
+                            <small>le {{ comment.creationDate | date("d/m/Y") }}
+                                à {{ comment.creationDate | date('H:i:s') }} </small>
+                            <p>{{ comment.Content }}</p>
+                        </div>
+                        <a href="{{ path('del_comment', {'_token' : csrf_token('delete' ~ comment.id), id:comment.id} ) }}">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

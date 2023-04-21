@@ -3,7 +3,8 @@ $(document).ready(function () {
     $("#load-more-button").on('click', function (e) {
         e.preventDefault();
         $("div.card-trick:hidden").slice(0, 6).slideDown();
-        if ($("div.card-trick:hidden").length == 0) {
+        console.log($("div.card-trick"));
+        if ($("div.card-trick:hidden").length === 0) {
             $("#load-more-button").hide('slow');
             $("#load-less-button").show('slow');
         }
@@ -13,7 +14,6 @@ $(document).ready(function () {
         $("div.card-trick").slice(6, $("div.card-trick").length).hide();
         $("#load-less-button").hide('slow');
         $("#load-more-button").show('slow');
-
     });
 })
 
@@ -63,22 +63,24 @@ document
         addTagFormDeleteLink(tag)
     })
 
-// add more trick
+// add more comment
 let commentContainer = document.querySelector("#comment")
 let btn = document.querySelector("#load-more")
-btn.addEventListener('click', function (e) {
-    e.preventDefault();
-    fetch(this.getAttribute("href"), {
-            method: "POST",
-            body: JSON.stringify({page: this.getAttribute('data-page')})
-        },
-    ).then(function (response) {
-        return response.text();
-    }).then(html => {
-        if (this.getAttribute('data-page') >= this.getAttribute('data-number-of-pages')) {
-            this.style.setProperty('display', 'none', 'important')
-        }
-        this.setAttribute('data-page', parseInt(this.getAttribute('data-page'), 10) + 1)
-        commentContainer.insertAdjacentHTML('beforeend', html);
+if (btn) {
+    btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        fetch(this.getAttribute("href"), {
+                method: "POST",
+                body: JSON.stringify({page: this.getAttribute('data-page')})
+            },
+        ).then(function (response) {
+            return response.text();
+        }).then(html => {
+            if (this.getAttribute('data-page') >= this.getAttribute('data-number-of-pages')) {
+                this.style.setProperty('display', 'none', 'important')
+            }
+            this.setAttribute('data-page', parseInt(this.getAttribute('data-page'), 10) + 1)
+            commentContainer.insertAdjacentHTML('beforeend', html);
+        })
     })
-})
+}

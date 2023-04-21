@@ -4,10 +4,10 @@
 
 {% block body %}
     <div class="container">
-        <h1 class="text-center">Enregistrer un nouveau Trick</h1>
+        <h1 class="text-center my-3">Enregistrer un nouveau Trick</h1>
 
         {{ include('trick_controller_edit/_form.html.twig') }}
 
-        <a href="{{ path('app_trick_controller_index') }}">Retour à l'accueil</a>
+        <a class="btn btn-primary mb-2" href="{{ path('app_home') }}">Retour à l'accueil</a>
     </div>
 {% endblock %}

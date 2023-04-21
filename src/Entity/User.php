@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Il y a déja un compte avec cette adresse mail')]
 class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
@@ -34,10 +34,11 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(nullable: true)]
     private ?string $pathPhoto = null;
 
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class, orphanRemoval: true)]
+    #[ORM\JoinColumn(onDelete: ['cascade'])]
     private Collection $userComment;
 
-    #[ORM\OneToMany(targetEntity: Trick::class, mappedBy: 'user')]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
     private Collection $tricks;
 
     #[ORM\Column(type: 'boolean')]
@@ -207,7 +208,6 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function removeUserComment(Comment $userComment): self
     {
         if ($this->userComment->removeElement($userComment)) {
-            // set the owning side to null (unless already changed)
             if ($userComment->getUser() === $this) {
                 $userComment->setUser(null);
             }

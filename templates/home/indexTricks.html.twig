@@ -6,11 +6,13 @@
     {% endif %}
     {% set compteur = compteur + column %}
     {% set compteurFigure = compteurFigure + 1 %}
-    <div class="col-4 col-lg-{{ column }}">
+    <div class="col-12 col-lg-{{ column }}">
         <div class="card-trick mb-2" style="display: none;">
             <div class="img-container">
                 <a href="{{ path('show_trick', {'slug': figure.slug}) }}">
-                    <img src="{{ figure.pictures[0].path }}" alt="">
+                    {% if figure.pictures is not empty %}
+                        <img src="{{ figure.pictures[0].path }}" alt="">
+                    {% endif %}
                 </a>
             </div>
             <div class="card-body d-flex mt-3 justify-content-between align-items-center">

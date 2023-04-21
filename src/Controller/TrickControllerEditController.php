@@ -22,13 +22,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/admin/trick')]
 class TrickControllerEditController extends AbstractController
 {
-    #[Route('/', name: 'app_trick_controller_index', methods: ['GET'])]
-    public function index(TrickRepository $trickRepository): Response
-    {
-        return $this->render('trick_controller_edit/index.html.twig', [
-            'tricks' => $trickRepository->findAll(),
-        ]);
-    }
 
     #[Route('/new', name: 'app_trick_controller_new', methods: ['GET', 'POST'])]
     public function new(Request $request, TrickRepository $trickRepository, string $public_directory): Response
@@ -50,7 +43,8 @@ class TrickControllerEditController extends AbstractController
             $trick->setUser($user);
             $trickRepository->save($trick, true);
 
-            return $this->redirectToRoute('app_trick_controller_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'La figue a bien été enregistrée');
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('trick_controller_edit/new.html.twig', [
@@ -95,6 +89,7 @@ class TrickControllerEditController extends AbstractController
 
         if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->query->get('_token'))) {
             $trickRepository->remove($trick, true);
+            $this->addFlash('success', 'La figure a été éffacé');
         }
 
         return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);

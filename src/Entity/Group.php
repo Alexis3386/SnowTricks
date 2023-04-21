@@ -24,7 +24,7 @@ class Group
 
     public function __construct()
     {
-        $this->Tricks = new ArrayCollection();
+        $this->tricks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,13 +49,13 @@ class Group
      */
     public function getTricks(): Collection
     {
-        return $this->Tricks;
+        return $this->tricks;
     }
 
     public function addTrick(Trick $trick): self
     {
-        if (!$this->Tricks->contains($trick)) {
-            $this->Tricks->add($trick);
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks->add($trick);
             $trick->setGroup($this);
         }
 
@@ -64,7 +64,7 @@ class Group
 
     public function removeTrick(Trick $trick): self
     {
-        $this->Tricks->removeElement($trick);
+        $this->tricks->removeElement($trick);
 
         return $this;
     }

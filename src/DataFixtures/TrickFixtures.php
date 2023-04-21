@@ -45,9 +45,6 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $moviesCode = ['_8TBfD5VPnM', '8KotvBY28Mo', 'V9xuy-rVj9w', 'h70kgLV2_Vg', 'QMrelVooJR4'];
 
         foreach ($groups as $groupSelect) {
-            $group = new Group();
-            $group->setName($groupSelect->getName());
-            $manager->persist($group);
 
             for ($i = 0; $i < 5; $i++) {
                 $trick = new Trick();
@@ -85,7 +82,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
                     $manager->persist($comment);
                 }
 
-                $group->addTrick($trick);
+                $groupSelect->addTrick($trick);
             }
             $manager->flush();
         }
